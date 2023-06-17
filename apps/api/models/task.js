@@ -12,7 +12,12 @@ const taskSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true
-  }
+  },
+  column: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Column',
+    required: true,
+  },
 });
 
 const Task = mongoose.model('Task', taskSchema);
