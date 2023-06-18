@@ -6,7 +6,7 @@ const userRouter=require('./controllers/userController');
 
 const app = express();
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect("mongodb://127.0.0.1/DWIT")
 .then(()=>console.log('connected to mongodb'))
 .catch(err=>console.error('could not connect to mongodb',err));
 
