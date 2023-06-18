@@ -1,7 +1,32 @@
-import { Button } from "@/presentation/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/presentation/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { authContext } from "@/context/auth";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Loading } from "../Loading";
 
 export default function Home() {
+
+    const auth = useContext(authContext);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        if (!auth.user) {
+            navigate("/login");
+        }
+
+        setLoading(false);
+
+    },[])
+
+    if (loading) {
+        return <Loading/>
+    }
+
+
+
     return (
         <div className="flex flex-col p-5 h-screen min-h-max">
             <h1 className="text-center text-5xl font-bold p-10">Hello Rojen</h1>

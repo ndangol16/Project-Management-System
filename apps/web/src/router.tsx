@@ -6,14 +6,19 @@ import { Home } from "./pages/Home";
 export const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login />,
+    element:
+        <Login />
   },
   {
     path: "/register",
-    element: <Register />,
+    element:
+
+        <Register />,
+
   },
   {
     path: "/",
-    element: <Home/>
+    element: <Home />
+
   }
 ]);
