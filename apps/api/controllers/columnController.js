@@ -2,6 +2,11 @@ const express = require('express');
 const Column = require('../models/column');
 const User = require('../models/user');
 const router = express.Router();
+const authorize = require('../middlewares/checkAuth');
+const setUser = require('../middlewares/setUser');
+
+router.use(authorize);
+router.use(setUser);
 
 router.get('/', async (req, res) => {
   try {
@@ -26,10 +31,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/add-column', async (req, res) => {
+router.post("/add-column", async (req, res) => {
   try {
     const columnData = req.body;
-    
+    console.log(columnData);
     // Find associated user
     const userId = columnData.user;
     const user = await User.findById(userId);
@@ -49,31 +54,39 @@ router.post('/add-column', async (req, res) => {
   }
 });
 
+
+
 router.delete('/delete-column/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const deletedColumn = await Column.findByIdAndDelete(id);
+    const column = await Column.findById(id);
 
-    if (!deletedColumn) {
+    if (!column) {
       return res.status(404).json({ message: 'Column not found' });
     }
 
-    // Remove the column association from the user
-    const userId = deletedColumn.user;
+    if (column.tasks.length > 0) {
+      return res.status(400).json({ message: 'Column has associated tasks. Delete the tasks first.' });
+    }
+
+    const userId = column.user;
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    user.columns.pull(deletedColumn);
+    user.columns.pull(column);
     await user.save();
+
+    await Column.findByIdAndDelete(id);
 
     res.status(200).json({ message: 'Column deleted successfully' });
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 
 router.put('/update-column/:id', async (req, res) => {
   try {
