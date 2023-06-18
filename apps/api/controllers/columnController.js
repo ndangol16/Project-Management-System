@@ -2,6 +2,11 @@ const express = require('express');
 const Column = require('../models/column');
 const User = require('../models/user');
 const router = express.Router();
+const authorize = require('../middlewares/checkAuth');
+const setUser = require('../middlewares/setUser');
+
+router.use(authorize);
+router.use(setUser);
 
 router.get('/', async (req, res) => {
   try {
@@ -73,7 +78,7 @@ router.delete('/delete-column/:id', async (req, res) => {
 
     user.columns.pull(column);
     await user.save();
-    
+
     await Column.findByIdAndDelete(id);
 
     res.status(200).json({ message: 'Column deleted successfully' });

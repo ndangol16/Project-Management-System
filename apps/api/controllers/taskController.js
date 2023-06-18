@@ -3,6 +3,12 @@ const router = express.Router();
 const Task = require('../models/task');
 const Column = require('../models/column');
 const multer = require('multer');
+const authorize = require('../middlewares/checkAuth');
+const setUser = require('../middlewares/setUser');
+
+router.use(authorize);
+router.use(setUser);
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
