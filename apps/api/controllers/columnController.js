@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 router.post('/add-column', async (req, res) => {
   try {
     const columnData = req.body;
-
+    
     // Find associated user
     const userId = columnData.user;
     const user = await User.findById(userId);
