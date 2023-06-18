@@ -15,7 +15,7 @@ const setUser = async (req, res, next) => {
       next();
     } catch (error) {
       console.error('Error setting user:', error);
-      res.status(400).json({ error: 'useer set error' });
+      res.status(400).json({ error: 'user set error' });
     }
   };
   

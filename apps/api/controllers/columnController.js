@@ -49,31 +49,39 @@ router.post("/add-column", async (req, res) => {
   }
 });
 
+
+
 router.delete('/delete-column/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const deletedColumn = await Column.findByIdAndDelete(id);
+    const column = await Column.findById(id);
 
-    if (!deletedColumn) {
+    if (!column) {
       return res.status(404).json({ message: 'Column not found' });
     }
 
-    // Remove the column association from the user
-    const userId = deletedColumn.user;
+    if (column.tasks.length > 0) {
+      return res.status(400).json({ message: 'Column has associated tasks. Delete the tasks first.' });
+    }
+
+    const userId = column.user;
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    user.columns.pull(deletedColumn);
+    user.columns.pull(column);
     await user.save();
+    
+    await Column.findByIdAndDelete(id);
 
     res.status(200).json({ message: 'Column deleted successfully' });
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 
 router.put('/update-column/:id', async (req, res) => {
   try {
