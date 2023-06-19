@@ -29,7 +29,7 @@ export default function Home() {
 
     return (
         <div className="flex flex-col p-5 h-screen min-h-max">
-            <h1 className="text-center text-5xl font-bold p-10">Hello Rojen</h1>
+            <h1 className="text-center text-5xl font-bold p-10">Hello {auth.user?.username}</h1>
 
             <section className="flex flex-row h-full gap-5 overflow-auto">
                 <Card className="w-96 h-full relative">

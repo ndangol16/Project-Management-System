@@ -6,7 +6,6 @@ const authorize = require('../middlewares/checkAuth');
 const setUser = require('../middlewares/setUser');
 
 router.use(authorize);
-router.use(setUser);
 
 router.get('/', async (req, res) => {
   try {
@@ -14,7 +13,7 @@ router.get('/', async (req, res) => {
 
     if (Object.keys(query).length === 0) {
       // if no query return all columns
-      const columns = await Column.find().populate('user');
+      const columns = await Column.find({user: req.user._id});
       res.send(columns);
     } else {
       // if query params filter by query
@@ -36,12 +35,13 @@ router.post("/add-column", async (req, res) => {
     const columnData = req.body;
     console.log(columnData);
     // Find associated user
-    const userId = columnData.user;
-    const user = await User.findById(userId);
+    const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    columnData.user = user._id;
 
     // Create column with associated user
     const newColumn = await Column.create(columnData);

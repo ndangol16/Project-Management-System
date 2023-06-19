@@ -6,12 +6,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { authContext } from "@/context/auth";
 import { Loader2 } from "lucide-react";
 
-enum LoginState { INITIAL, LOADING, FAILED };
+enum LoginState { INITIAL, LOADING, FAILED }
 
 export default function Login() {
 
   const [state, setState] = useState<LoginState>(LoginState.INITIAL);
-  const [error, setError] = useState<String | null>("");
+  const [error, setError] = useState<string | null>("");
 
   const [formData, setFormData] = useState({ username: "", password: "" });
 
@@ -26,7 +26,9 @@ export default function Login() {
     setState(LoginState.LOADING);
 
 
-    const res = await fetch("/api/users/login", { method: "POST", body: JSON.stringify(formData) });
+    const res = await fetch("/api/users/login", { method: "POST",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(formData) });
 
     const data = await res.json();
 

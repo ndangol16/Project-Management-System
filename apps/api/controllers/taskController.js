@@ -6,7 +6,7 @@ const multer = require('multer');
 const authorize = require('../middlewares/checkAuth');
 const setUser = require('../middlewares/setUser');
 
-router.use(authorize);
+// router.use(authorize);
 router.use(setUser);
 
 

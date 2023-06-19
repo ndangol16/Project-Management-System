@@ -1,17 +1,19 @@
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const setUser = async (req, res, next) => {
-    try {
 
-        const user = await User.findById(req.userId);
-  
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+    try {
+      if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+        const token = req.headers.authorization.split(" ")[1];
+
+        const {userId} = jwt.verify(token, "secret-key");
+
+        const user = await User.findById(userId);
+
+        req.user = user;
+
       }
-  
-      // Setting the user
-      req.user = user;
-  
       next();
     } catch (error) {
       console.error('Error setting user:', error);
