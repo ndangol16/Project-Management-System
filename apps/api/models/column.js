@@ -15,6 +15,11 @@ const ColumnSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  tasks: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Task',
+    required: true,
+  }
 });
 
 const Column = mongoose.model("Column", ColumnSchema);
